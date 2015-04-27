@@ -32,11 +32,7 @@ static void print_fmt(const std::string& str, const T&... variables)
     make_format(fmt,variables...);
 }
 
-struct 
-{
-    template<typename T>
-    void operator() (T t) {std::cout << t << "\t";}
-} print_item;
+
 
 
 //Boost date_time is not header only library. 

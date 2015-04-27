@@ -11,32 +11,35 @@
 template<typename T>
 void bubble_sort(T&& arr)
 {
-	int len = sizeof(arr) / sizeof(arr[0]);
-	//flag在初始条件下和排序未完成时,均为false,取反得true,使得程序继续循环.且每次循环初始时,flag=true.
-	//若某一次,排序已完成,则不会进入if的内部,flag在本次循环未发生改变,保持为ture
-	//下次进入循环时,flag取反后为false,则退出循环,排序完成.
-	for (bool flag = false; flag = !flag; --len)
-	{
-		for (int j = 0; j < len -1; ++j)
-		{
-			if (arr[j]>arr[j+1])//只要进入过if内部,则说明排序未完成,flag = false;
-			{
-				std::swap(arr[j],arr[j+1]);
-				flag = false;
-			}
-		}
-	}
+    int len = sizeof(arr) / sizeof(arr[0]);
+    size_t last = len-1, hi = len-1;
+    //last 记录了上一次循环存在交换操作的最大rank,那么rank之后的元素已经是有序的了
+    //这一次循环只需要对[0,rank] 之间的元素进行排序就够了
+    for (; 0<hi; hi=last) 
+    {
+        last = 0;
+        //这里很重要,将last重置为0,若下面没有交换操作,本次外循环结束时,执行hi=last=0;下次循环就直接跳出了.
+        //否则,当本次外循环不发生交换操作时,由于last没有重置,会使last一直保持当前值,程序无法正确跳出,一直循环下去.
+        for (int j = 0; j < hi; ++j)//由于下面交换操作的rank是j和j+1,所以这里j<hi就可以了,j+1会保证rank为hi的元素得到检测.
+        {
+            if (arr[j+1] < arr[j])//这里注意内循环结束后,保证[j+1,len)之间的元素是有序的,下次循环只检测[0,j]就可以了
+            {
+                std::swap(arr[j],arr[j+1]);
+                last = j;
+            }
+        }
+    }        
 }
 
 
 int main(int argc, char const *argv[])
 {
-	int arr[10] = {2,5,9,7,3,8,3,4,5,6};
-	PRINT_IT(sizeof(arr));
-	PRINT_IT(sizeof(arr[0]));
-	bubble_sort(arr);
+    int arr[10] = {2,5,9,7,3,8,3,4,5,6};
+    PRINT_IT(sizeof(arr));
+    PRINT_IT(sizeof(arr[0]));
+    bubble_sort(arr);
 
-	for(const auto& elem : arr)
-		PRINT_IT(elem);	
-	return 0;
+    for(const auto& elem : arr)
+        PRINT_IT(elem); 
+    return 0;
 }
