@@ -33,8 +33,7 @@ public:
     int uniquify();
     int uniquify_unsort();
     void traverse(void (*visit)(T&));
-    template <typename TVS>
-    void traverse(TVS& visit);
+    template <typename TVS> void traverse(TVS& visit);
     void bubble_sort();
     void merge_sort(int lo, int hi);
     void merge(int lo, int mi, int hi);

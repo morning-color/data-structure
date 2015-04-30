@@ -5,9 +5,15 @@ _Pragma("once");
 #include <ctime>
 
 #define PRINT_IT(xxx) std::cout << boost::format("%1%  =  %2%\n") % #xxx % xxx 
-#define PRINT_HERE(...) { printf("File:%s, Func:%s, Line:%d-->",__FILE__,__func__,__LINE__); \
-                          printf(__VA_ARGS__); puts("");}
+#define PRINT_HERE(...) { print_fmt("%s",str_now()); \
+                          print_fmt("File:%s/n, Func:%s, Line:%d-->",__FILE__,__func__,__LINE__); \
+                          print_fmt("%s\n",__VA_ARGS__);}
 
+#include <tuple>
+#include <type_traits>
+template<typename T>
+int tuple_len(T t){ return std::tuple_size<decltype(t)>::value;} 
+#define TUPLE_LEN(xxx) std::tuple_size<decltype(xxx)>::value
 
 //for cout format strings 
 template <typename T>
