@@ -48,8 +48,7 @@ static void print_fmt(const std::string& str, const T&... variables)
 namespace pt = boost::posix_time;
 static std::string str_now()
 {
-  return pt::to_simple_string(pt::microsec_clock::local_time()).substr(0,24) 
-            + std::string("\n");
+  return pt::to_simple_string(pt::microsec_clock::local_time()).substr(0,24);
 }
 
 class boost_posix_timer
@@ -102,3 +101,6 @@ struct
     template<typename T>
     void operator() (T t) {std::cout << t << "\t";}
 } print_elem;
+
+template<typename T>
+void print_func(T& t) {std::cout << t << "\t";}
