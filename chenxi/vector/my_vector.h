@@ -20,6 +20,7 @@ public:
     int capacity() const {return d_capacity;}
     T& operator[](size_t rank) const {return d_data[rank];}
     my_vector<T>& operator=(my_vector<T>& vec);
+    bool empty() const {return (d_size==0);}
     int expand();
     int shrink();
     int remove(int lo, int hi);
@@ -27,7 +28,7 @@ public:
     int find(const T& elem) const {find(elem,0,d_size);}
     int find(const T& elem, int lo, int hi) const;
     void insert(const T& elem, int rank);
-    void push_back(const T& elem){insert(elem,size);}
+    void push_back(const T& elem){insert(elem,d_size);}
     int search(const T& elem, int lo, int hi) const;
     int search(const T& elem) const {return (0 >= d_size)? -1 : search(elem, 0, d_size);}
     int uniquify();
@@ -41,7 +42,7 @@ public:
 private:
     T* d_data;
     static const int INIT_CAPACITY = 100;
-    int d_size    = 10;
+    int d_size    = 0;
     int d_capacity = INIT_CAPACITY;
 };
 
@@ -114,7 +115,7 @@ int my_vector<T>::shrink()
 {
     if (d_size > d_capacity/2) return d_capacity;
     while(d_size > (d_capacity>>=1))
-        if (INIT_CAPACITY > d_capacity) return;
+        if (INIT_CAPACITY > d_capacity) return d_capacity;
     T* old_data = d_data;
     d_data = new T [d_capacity];
     std::copy_n(old_data, d_size, d_data);
@@ -142,7 +143,7 @@ template<typename T>
 int my_vector<T>::remove(int lo, int hi)
 {
     BOOST_ASSERT_MSG( (0 <= lo) && (hi <= d_size), "输入了非法的删除范围!");
-    if(lo = hi) return 0;
+    if(lo == hi) return 0;
     while(hi<d_size) d_data[lo++] = d_data[hi++];
     d_size = lo;
     shrink();
@@ -154,7 +155,7 @@ T my_vector<T>::remove(int rank)
 {
     BOOST_ASSERT_MSG( (0 <= rank) && (rank <= d_size), "输入了非法的删除范围!");
     T tmp = d_data[rank];
-    remove(rank,++rank); 
+    remove(rank,rank+1); 
     return tmp;
 }
 
@@ -166,6 +167,7 @@ void my_vector<T>::insert(const T& elem, int rank)
     int i = rank;
     while(i<d_size) d_data[i+1] = d_data[i];
     d_data[rank] = elem;
+    ++d_size;
 }
 
 
@@ -179,7 +181,7 @@ void my_vector<T>::insert(const T& elem, int rank)
 //                                V
 //       _____________________________________________________
 //       |_______________________|_|__________________________|   
-//                                 lo = mi = hi
+//                           lo = mi = hi
 //                          返回lo-1              
 template<typename T>
 int my_vector<T>::search(const T& elem, int lo, int hi) const

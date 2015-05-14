@@ -90,7 +90,6 @@ public:
     void merge(const linked_list<T>& rhs_list)
     { merge(first(),d_size,rhs_list, rhs_list.first(), rhs_list.size()); }
     void merge_sort(node_ptr p, int num);
-    void merge_sort(node_ptr p, int num);
 private:
     void copy_list(node_ptr ptr, int num);
     int d_size;
@@ -383,7 +382,7 @@ void linked_list<T>::merge(node_ptr& lhs_p, int lhs_num,
     const linked_list<T>& rhs_list, node_ptr rhs_p, int rhs_num)
 {
     node_ptr tmp = lhs_p->pred();
-    for(; (rhs_p!=rhs_list.last()->succ()) && (0<rhs_num--); rhs_p = rhs_p->succ() )
+    for(;(rhs_p!=rhs_list.last()->succ()) && (0<rhs_num--); rhs_p = rhs_p->succ() )
     {
         if (rhs_p->data() <= lhs_p->data())
             lhs_p->insert_pred(rhs_p->data());

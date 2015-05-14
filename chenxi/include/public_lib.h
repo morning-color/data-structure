@@ -1,13 +1,16 @@
 _Pragma("once");
 #include <iostream>
 #include <boost/format.hpp>
+#include <boost/assert.hpp>
 #include <utility>
 #include <ctime>
 
-#define PRINT_IT(xxx) std::cout << boost::format("%1%  =  %2%\n") % #xxx % xxx 
-#define PRINT_HERE(...) { print_fmt("%s",str_now()); \
-                          print_fmt("File:%s/n, Func:%s, Line:%d-->",__FILE__,__func__,__LINE__); \
-                          print_fmt("%s\n",__VA_ARGS__);}
+#define PRINT_IT(xxx) std::cout << boost::format("%-20s =") % #xxx << boost::format(" %1%\n") % xxx
+// #define PRINT_HERE(...) { print_fmt("%s",str_now()); \
+//                           print_fmt("File:%s/n, Func:%s, Line:%d-->",__FILE__,__func__,__LINE__); \
+//                           print_fmt("%s\n",__VA_ARGS__);}
+#define PRINT_HERE() {print_fmt("(((------ [Func] %s | [Line] %d ------)))",__func__,__LINE__);}
+#define ASSERT_MSG  BOOST_ASSERT_MSG                          
 
 #include <tuple>
 #include <type_traits>
@@ -38,7 +41,12 @@ static void print_fmt(const std::string& str, const T&... variables)
     make_format(fmt,variables...);
 }
 
-
+// template<typename... Args>
+// void print_them(const std::string& str, const Args&... para)
+// {
+//   int size = sizeof...(Args);
+//   PRINT_IT(para)...;
+// }
 
 
 //Boost date_time is not header only library. 
